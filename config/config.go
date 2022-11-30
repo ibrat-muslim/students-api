@@ -11,9 +11,9 @@ type Config struct {
 }
 
 type PostgresConfig struct {
-	Host string
-	Port string
-	User string
+	Host     string
+	Port     string
+	User     string
 	Password string
 	Database string
 }
@@ -27,9 +27,9 @@ func Load(path string) Config {
 	cfg := Config{
 		HttpPort: conf.GetString("HTTP_PORT"),
 		Postgres: PostgresConfig{
-			Host: conf.GetString("POSTGRES_HOST"),
-			Port: conf.GetString("POSTGRES_PORT"),
-			User: conf.GetString("POSTGRES_USER"),
+			Host:     conf.GetString("POSTGRES_HOST"),
+			Port:     conf.GetString("POSTGRES_PORT"),
+			User:     conf.GetString("POSTGRES_USER"),
 			Password: conf.GetString("POSTGRES_PASSWORD"),
 			Database: conf.GetString("POSTGRES_DATABASE"),
 		},

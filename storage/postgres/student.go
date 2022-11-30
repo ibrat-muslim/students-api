@@ -17,7 +17,7 @@ func NewStudent(db *sqlx.DB) repo.StudentStorageI {
 	}
 }
 
-func (st *studentRepo) Create(s []*repo.Student) error {
+func (sr *studentRepo) Create(s []*repo.Student) error {
 	query := `
 		INSERT INTO students (
 			first_name,
@@ -29,7 +29,7 @@ func (st *studentRepo) Create(s []*repo.Student) error {
 	`
 
 	for _, student := range s {
-		_, err := st.db.Exec(
+		_, err := sr.db.Exec(
 			query,
 			student.FirstName,
 			student.LastName,
@@ -46,9 +46,10 @@ func (st *studentRepo) Create(s []*repo.Student) error {
 	return nil
 }
 
-func (st *studentRepo) GetAll(params *repo.GetAllStudentsParams) (*repo.GetAllStudentsResult, error) {
+func (sr *studentRepo) GetAll(params *repo.GetAllStudentsParams) (*repo.GetAllStudentsResult, error) {
 	result := repo.GetAllStudentsResult{
 		Students: make([]*repo.Student, 0),
+		Count:    0,
 	}
 
 	offset := (params.Page - 1) * params.Limit
@@ -61,8 +62,8 @@ func (st *studentRepo) GetAll(params *repo.GetAllStudentsParams) (*repo.GetAllSt
 		filter += fmt.Sprintf(`
 				WHERE first_name ILIKE '%s' OR last_name ILIKE '%s' OR 
 				username ILIKE '%s' OR email ILIKE '%s' OR phone_number ILIKE '%s'`,
-				str, str, str, str, str,
-			)
+			str, str, str, str, str,
+		)
 	}
 
 	query := `
@@ -79,7 +80,7 @@ func (st *studentRepo) GetAll(params *repo.GetAllStudentsParams) (*repo.GetAllSt
 		ORDER BY created_at DESC 
 	    ` + limit
 
-	rows, err := st.db.Query(query)
+	rows, err := sr.db.Query(query)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +109,7 @@ func (st *studentRepo) GetAll(params *repo.GetAllStudentsParams) (*repo.GetAllSt
 
 	quertCount := `SELECT count(1) FROM students ` + filter
 
-	err = st.db.QueryRow(quertCount).Scan(&result.Count)
+	err = sr.db.QueryRow(quertCount).Scan(&result.Count)
 
 	if err != nil {
 		return nil, err

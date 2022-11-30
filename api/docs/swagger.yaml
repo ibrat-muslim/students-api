@@ -1,0 +1,119 @@
+basePath: /v1
+definitions:
+  models.CreateStudentRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      phone_number:
+        type: string
+      username:
+        type: string
+    type: object
+  models.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  models.GetAllStudentsResponse:
+    properties:
+      count:
+        type: integer
+      students:
+        items:
+          $ref: '#/definitions/models.Student'
+        type: array
+    type: object
+  models.OKResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  models.Student:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      phone_number:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: This is a student service api.
+  title: Swagger for student api
+  version: "1.0"
+paths:
+  /students:
+    get:
+      consumes:
+      - application/json
+      description: Get students
+      parameters:
+      - default: 10
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - default: 1
+        in: query
+        name: page
+        required: true
+        type: integer
+      - in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.GetAllStudentsResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get students
+      tags:
+      - student
+    post:
+      consumes:
+      - application/json
+      description: Create a student
+      parameters:
+      - description: Student
+        in: body
+        name: student
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/models.CreateStudentRequest'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.OKResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create a student
+      tags:
+      - student
+swagger: "2.0"

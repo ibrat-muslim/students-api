@@ -3,27 +3,27 @@ package repo
 import "time"
 
 type Student struct {
-	ID int64
-	FirstName string
-	LastName string
-	UserName string
-	Email string
+	ID          int64
+	FirstName   string
+	LastName    string
+	UserName    string
+	Email       string
 	PhoneNumber string
-	CreatedAt time.Time
+	CreatedAt   time.Time
 }
 
 type GetAllStudentsParams struct {
-	Limit int32
-	Page int32
+	Limit  int32
+	Page   int32
 	Search string
 }
 
 type GetAllStudentsResult struct {
 	Students []*Student
-	Count int32
+	Count    int32
 }
 
 type StudentStorageI interface {
-	Create(s []*Student) (error)
+	Create(s []*Student) error
 	GetAll(params *GetAllStudentsParams) (*GetAllStudentsResult, error)
 }
